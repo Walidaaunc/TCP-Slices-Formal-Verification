@@ -1,0 +1,386 @@
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_patch.c (K=1)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.72 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_patch.c (K=2)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.66 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_patch.c (K=3)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.66 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_patch.c (K=5)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.12 seconds
+  Peak Memory:    14.08 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_patch.c (K=10)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.19 seconds
+  Peak Memory:    23.16 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_vulnerability.c (K=1)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.07 seconds
+  Peak Memory:    0.73 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_vulnerability.c (K=2)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 1073677315 | Trace B Seq: 1073741824
+  [INPUT]  Attacker Guesses: 1073741824
+------------------------------
+  [OUTPUT] Observation A: 0 | Observation B: 2
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.14 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_vulnerability.c (K=3)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 1 | Trace B Seq: 0
+  [INPUT]  Attacker Guesses: 1
+------------------------------
+  [OUTPUT] Observation A: 2 | Observation B: 0
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.09 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_vulnerability.c (K=5)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 1 | Trace B Seq: 0
+  [INPUT]  Attacker Guesses: 0
+------------------------------
+  [OUTPUT] Observation A: 0 | Observation B: 2
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.13 seconds
+  Peak Memory:    9.78 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: cve_2016_5696_vulnerability.c (K=10)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 1010822586 | Trace B Seq: 1010740666
+  [INPUT]  Attacker Guesses: 1010757050
+------------------------------
+  [OUTPUT] Observation A: 2 | Observation B: 0
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.13 seconds
+  Peak Memory:    10.77 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_patch.c (K=1)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.13 seconds
+  Peak Memory:    10.20 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_patch.c (K=2)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.12 seconds
+  Peak Memory:    9.66 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_patch.c (K=3)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.22 seconds
+  Peak Memory:    34.69 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_patch.c (K=5)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.13 seconds
+  Peak Memory:    24.73 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_patch.c (K=10)
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.19 seconds
+  Peak Memory:    34.33 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_vulnerability.c (K=1)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 33554433 | Trace B Seq: 0
+  [STATE]  Victim IP: 1804
+  [INPUT]  Attacker IP: 1073743628
+  [INPUT]  Attacker Guesses: 33554433
+------------------------------
+  [OUTPUT] Observation A: 1 | Observation B: 0
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 73.69 seconds
+  Peak Memory:    420.81 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_vulnerability.c (K=2)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 2080440064 | Trace B Seq: 2080374783
+  [STATE]  Victim IP: 1447
+  [INPUT]  Attacker IP: 34215
+  [INPUT]  Attacker Guesses: 2080440318
+------------------------------
+  [OUTPUT] Observation A: 1 | Observation B: 0
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 60.74 seconds
+  Peak Memory:    756.39 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_vulnerability.c (K=3)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 2145116161 | Trace B Seq: 0
+  [STATE]  Victim IP: 416
+  [INPUT]  Attacker IP: 536871328
+  [INPUT]  Attacker Guesses: 122880, 0
+------------------------------
+  [OUTPUT] Observation A: 0 | Observation B: 1
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 96.61 seconds
+  Peak Memory:    1017.84 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_vulnerability.c (K=5)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 1073610752 | Trace B Seq: 98299
+  [STATE]  Victim IP: 900
+  [INPUT]  Attacker IP: 8389508
+  [INPUT]  Attacker Guesses: 98270, 65536, 268435456, 32764, 139002
+------------------------------
+  [OUTPUT] Observation A: 0 | Observation B: 1
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 170.08 seconds
+  Peak Memory:    1465.44 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: ipid_downgrade_vulnerability.c (K=10)
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Seq: 50376710 | Trace B Seq: 50073611
+  [STATE]  Victim IP: 1354
+  [INPUT]  Attacker IP: 9546
+  [INPUT]  Attacker Guesses: 50069515, 50135048, 554172416, 49917962, 50135040, 50114568, 50069504, 50053120
+------------------------------
+  [OUTPUT] Observation A: 0 | Observation B: 1
+  [CAUSE]  Resource Contention
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 357.10 seconds
+  Peak Memory:    2822.75 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: port_inference_patch.c
+============================================================
+[+] RESULT: NO VIOLATION FOUND (within bound K)
+    The model checker proved that within the explored
+    bound, the attacker cannot distinguish between secrets.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.64 MB
+------------------------------------------------------------
+
+============================================================
+[*] AUTOMATED NON-INTERFERENCE CHECKER
+[*] Target Model: port_inference_vulnerability.c
+============================================================
+[!] RESULT: NON-INTERFERENCE VIOLATION DETECTED
+------------------------------------------------------------
+  [SECRET] Trace A Port: 32768 | Trace B Port: 0
+  [INPUT]  Attacker Guess: 32768
+------------------------------
+  [OUTPUT] Time A: 122ms | Time B: 10ms
+  [CAUSE]  Timing Side-Channel
+------------------------------------------------------------
+[Vulnerability Summary]
+A counterexample was found where the attacker's observation
+differed between two executions with identical attacker inputs,
+proving that High-Security data has leaked into Low-Security outputs.
+------------------------------------------------------------
+[Performance Metrics]
+  Execution Time: 0.06 seconds
+  Peak Memory:    0.70 MB
+------------------------------------------------------------

@@ -1,0 +1,180 @@
+//
+// Created by Walid Ait Amrou on 3/28/26.
+//
+
+// We assume the off-path attacker has already identified the target server's IP and port.
+// This model verifies whether a side-channel in the IPID assignment allows the
+// attacker to confirm the existence of a specific TCP connection and leak its
+// secret sequence number through observed hash collisions.
+
+#include <assert.h>
+#include <stdint.h>
+#include <stdbool.h>
+#include <string.h>
+
+#define ID_STABLE 0
+#define ID_INCREMENTED 1
+
+#define SEQ_MIN_NUMBER 0
+#define SEQ_MAX_NUMBER UINT32_MAX // The standard TCP sequence number space is 2^32	unique sequence numbers
+#define MAX_WINDOW_SIZE UINT16_MAX	// The maximum standard TCP window size is 2^16 (65,535) bytes
+
+#define TCP_NUMBER 6    // TCP is assigned the protocol number 6 by the Internet Assigned Numbers Authority (IANA)
+
+#ifndef K_BOUND
+#define K_BOUND 1 // Default value if not provided via -DK_BOUND=...
+#endif
+
+// Declares nondeterministic helpers for CBMC
+int nondet_int();  // Allows exploration of all possible integer values under the given constraints
+_Bool nondet_bool();
+
+typedef struct {
+    // The default policy assigns IPIDs per socket for better security.
+    // If this policy is disabled (set to false), IPIDs are assigned using a hash counter.
+    bool default_behavior;
+
+    // In the downgraded IPID assignment mode, there are normally 2048 globally shared hash counters
+    uint32_t global_ipid_counter[2048];
+} global_state_type;
+
+// Initializes a global instance
+global_state_type global_state;
+
+// Restores independence between the two executions
+void reset_state() {
+    global_state.default_behavior = true;
+    memset(global_state.global_ipid_counter, 0, sizeof(global_state.global_ipid_counter));
+}
+
+typedef struct {
+    uint32_t ip_addr;   // Secret for victim
+    uint32_t seq;   // Secret for victim
+    bool df_flag;   // false triggers the downgrade
+    int local_ipid_counter; // Private IPID counter for this connection
+
+    // By selecting the IPID policy based on the immutable Protocol field,
+    // the server ensures TCP packets always use secure per-socket counters,
+    // neutralizing the ICMP-based side-channel
+    int protocol;
+} tcp_conn;
+
+// Models hashing of (source IP, destination IP, protocol, boot randomness),
+// but simplified to use only the source IP to reduce state complexity.
+static inline int hash_to_counter(int source_ip) {
+    return ((source_ip ^ 0x55) & 0x7FF) % 2048;
+}
+
+// Returns the current value of the global IPID counter at the given index
+int observe_ipid(int index) {
+    return global_state.global_ipid_counter[index];
+}
+
+// Downgrades IPID assignment from the default per-socket policy to the simplified hash-counter-based assignment
+void downgrade_IPID_assignment() {
+    global_state.default_behavior = false;
+}
+
+// This function describes how the server handles an incoming packet
+void process_packet(tcp_conn *conn, int incoming_seq) {
+    uint32_t difference = incoming_seq - conn->seq;
+
+    // If the sequence number falls within the TCP receive window but does not match the expected
+    // sequence number, the packet is considered suspicious and triggers a Challenge ACK response,
+    // as implemented in real TCP stacks for in-window but unexpected segments
+    bool is_in_window = (difference < MAX_WINDOW_SIZE || difference > (UINT32_MAX - MAX_WINDOW_SIZE));
+
+    if (conn->protocol == TCP_NUMBER) {
+        if (is_in_window) {
+            conn->local_ipid_counter++;
+        }
+    } else {  // Only non-TCP traffic (e.g., ICMP) uses the shared hash counters
+
+        if (conn->df_flag == false) {
+            // Forces a downgrade: the system-wide IPID policy switches to the shared counter mode
+            downgrade_IPID_assignment();
+        }
+
+        // Selects the IPID counter based on the source IP address
+        int index = hash_to_counter(conn->ip_addr);
+
+        // The counter increments only if the guessed sequence is valid (Challenge ACK)
+        if (is_in_window) {
+            global_state.global_ipid_counter[index]++;
+        }
+    }
+}
+
+// Simulates a single execution trace to test for information leakage via self-composition
+int run_trace(int secret_seq, int victim_ip, int attacker_ip, int attacker_seq_num_guesses[]) {
+    reset_state();  // Isolates each run
+
+    // An off-path attacker tries to send a spoofed ICMP "Fragmentation Needed" message to the victim server.
+    // In the patched version, the server's policy enforcement prevents this attempt from
+    // triggering a protocol downgrade.
+    tcp_conn attacker_forged_icmp = { .seq = 0, .df_flag = false, .protocol = TCP_NUMBER };
+    process_packet(&attacker_forged_icmp, attacker_forged_icmp.seq);
+
+    // The attacker probes their own IPs to find one that maps to the same hash counter
+    // as the victim's TCP connection (via a hash collision).
+    // Instead of iterating over many IPs, we model this by using a single nondet_int()
+    // to represent the "lucky" IP chosen by the attacker.
+    int counter_index = hash_to_counter(attacker_ip);
+    __CPROVER_assume(counter_index == hash_to_counter(victim_ip));
+
+    // The attacker samples the shared IPID counter to establish a baseline
+    int base_ipid = observe_ipid(counter_index);
+
+    // The attacker sends spoofed TCP packets to the victim's connection with a guessed
+    // sequence number to trigger a Challenge ACK. Because of the patch, any resulting
+    // IPID increment is restricted to the private 'local_ipid_counter'.
+    tcp_conn forged_victim =
+        { .ip_addr = victim_ip, .seq = secret_seq, .df_flag = true, .local_ipid_counter = 0, .protocol = TCP_NUMBER };
+
+    for (int i = 0; i < K_BOUND; i++) {
+        process_packet(&forged_victim, attacker_seq_num_guesses[i]);
+    }
+
+    int new_ipid = observe_ipid(counter_index); // The attacker re-observes the shared IPID counter
+
+    if (new_ipid > base_ipid) { // If the IPID has increased, it indicates a collision with the victim's counter
+        return ID_INCREMENTED;  // Side-channel leak: the attacker has identified a colliding IP
+    }
+
+    return ID_STABLE;   // No signal detected
+}
+
+int main() {
+    // High security secret inputs
+    int secret_seq_num_1 = nondet_int();
+    int secret_seq_num_2 = nondet_int();
+    int victim_ip = nondet_int();
+
+    __CPROVER_assume(secret_seq_num_1 >= SEQ_MIN_NUMBER && secret_seq_num_1 <= SEQ_MAX_NUMBER);
+    __CPROVER_assume(secret_seq_num_2 >= SEQ_MIN_NUMBER && secret_seq_num_2 <= SEQ_MAX_NUMBER);
+    __CPROVER_assume(victim_ip >= 0);
+
+    // We assume the two secrets are distinct
+    __CPROVER_assume(secret_seq_num_1 != secret_seq_num_2);
+
+    // Low security attacker inputs
+    int attacker_ip = nondet_int();
+    int attacker_seq_num_guesses[K_BOUND];
+
+    __CPROVER_assume(attacker_ip >= 0);
+    __CPROVER_assume(attacker_ip != victim_ip);
+
+    for (int i = 0; i < K_BOUND; i++) {
+        attacker_seq_num_guesses[i] = nondet_int();
+        __CPROVER_assume(attacker_seq_num_guesses[i] >= SEQ_MIN_NUMBER && attacker_seq_num_guesses[i] <= SEQ_MAX_NUMBER);
+    }
+
+    // The trace is executed twice using self-composition: once with the victim
+    // holding secret_seq_num_1, and once with the victim holding secret_seq_num_2
+    int attacker_observation_1 = run_trace(secret_seq_num_1, victim_ip, attacker_ip, attacker_seq_num_guesses);
+    int attacker_observation_2 = run_trace(secret_seq_num_2, victim_ip, attacker_ip, attacker_seq_num_guesses);
+
+    assert(attacker_observation_1 == attacker_observation_2);   // Non-interference property
+
+    return 0;
+}
