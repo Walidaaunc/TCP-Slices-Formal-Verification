@@ -2,7 +2,7 @@
 // Created by Walid Ait Amrou on 3/28/26.
 //
 
-// We assume the off-path attacker has already identified the target server's IP and port.
+// The off-path attacker is assumed to have already identified the target server's IP and port.
 // This model verifies whether a side-channel in the IPID assignment allows the
 // attacker to confirm the existence of a specific TCP connection and leak its
 // secret sequence number through observed hash collisions.
@@ -117,7 +117,7 @@ int run_trace(int secret_seq, int victim_ip, int attacker_ip, int attacker_seq_n
 
     // The attacker probes their own IPs to find one that maps to the same hash counter
     // as the victim's TCP connection (via a hash collision).
-    // Instead of iterating over many IPs, we model this by using a single nondet_int()
+    // Instead of iterating over many IPs, this is modeled by using a single nondet_int()
     // to represent the "lucky" IP chosen by the attacker.
     int counter_index = hash_to_counter(attacker_ip);
     __CPROVER_assume(counter_index == hash_to_counter(victim_ip));
@@ -154,7 +154,7 @@ int main() {
     __CPROVER_assume(secret_seq_num_2 >= SEQ_MIN_NUMBER && secret_seq_num_2 <= SEQ_MAX_NUMBER);
     __CPROVER_assume(victim_ip >= 0);
 
-    // We assume the two secrets are distinct
+    // The two secrets are assumed to be distinct
     __CPROVER_assume(secret_seq_num_1 != secret_seq_num_2);
 
     // Low security attacker inputs

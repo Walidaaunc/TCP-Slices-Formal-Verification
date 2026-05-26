@@ -2,7 +2,7 @@
 // Created by Walid Ait Amrou on 3/21/26.
 //
 
-// We assume the off-path attacker has already identified the target's IP address.
+// The off-path attacker is assumed to have already identified the target's IP address.
 // This model verifies whether the attacker can infer the sensitive TCP port number
 // (the remaining piece of the connection's "four-tuple") by observing
 // data-dependent execution times (a timing side channel).
@@ -70,7 +70,7 @@ int main() {
     __CPROVER_assume(secret_port_1 >= PORT_MIN_NUMBER && secret_port_1 <= PORT_MAX_NUMBER);
     __CPROVER_assume(secret_port_2 >= PORT_MIN_NUMBER && secret_port_2 <= PORT_MAX_NUMBER);
 
-    // We assume the two secrets are distinct
+    // The two secrets are assumed to be distinct
     __CPROVER_assume(secret_port_1 != secret_port_2);
 
     // Low security attacker input

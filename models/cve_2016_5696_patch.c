@@ -2,7 +2,7 @@
 // Created by Walid Ait Amrou on 3/21/26.
 //
 
-// We assume the off-path attacker has already identified the correct IP
+// The off-path attacker is assumed to have already identified the correct IP
 // and port number for the victim's connection (e.g., via a previous
 // port-probing side channel). The goal of this specific verification
 // is to see if the attacker can now infer the sensitive TCP sequence number.
@@ -101,7 +101,7 @@ int main() {
 
     __CPROVER_assume(secret_seq_num_1 >= SEQ_MIN_NUMBER && secret_seq_num_1 <= SEQ_MAX_NUMBER);
     __CPROVER_assume(secret_seq_num_2 >= SEQ_MIN_NUMBER && secret_seq_num_2 <= SEQ_MAX_NUMBER);
-    __CPROVER_assume(secret_seq_num_1 != secret_seq_num_2);  // We assume the two secrets are distinct
+    __CPROVER_assume(secret_seq_num_1 != secret_seq_num_2);  // The two secrets are assumed to be distinct
 
     // Low security attacker inputs
     int attacker_seq_num_guess = nondet_int();
